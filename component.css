@@ -61,7 +61,7 @@
   padding: 6px 3px;
 }
 
-:host .true .remove-item {
+:host .completed .remove-item {
   display: inline-block;
   float: right;
   color: #639ccd;
@@ -75,11 +75,11 @@
   width: 240px;
 }
 
-:host .true .remove-item:hover {
+:host .completed .remove-item:hover {
   text-decoration: underline;
 }
 
-:host .true label {
+:host .completed label {
   text-decoration: line-through;
 
   color: #999;

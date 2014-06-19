@@ -43,7 +43,7 @@
       <p class="no-items">0 To-do Items</p>
       </template>
       <template repeat="{{item, itemindex in items}}">
-        <div class="item {{item.completed}}">
+        <div class="item {{item.completed | applyClassName}}">
           <a on-click="{{removeItem}}" data-item-index="{{itemindex}}" class="remove-item">Clear</a>
           <label>
             <input data-item-index="{{itemindex}}" on-change="{{onCheckboxChange}}" type="checkbox" checked="{{item.completed}}" />
@@ -146,6 +146,12 @@
           var dataItem = collection.data[index];
           collection.removeItem(index);
           this.completed--;
+        },
+        applyClassName: function(value) {
+          if (value) {
+            return "completed";
+          }
+          return;
         }
       });
     </script>

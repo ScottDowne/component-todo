@@ -60,6 +60,7 @@
           this.super();
           this.collections = document.querySelector("ceci-collections");
           this.items = [];
+          this.onItemChange = null;
           this.completed = 0;
         },
         collectionReady: function() {
@@ -83,7 +84,7 @@
               this.completed++;
             }
           }
-          collection.addEventListener("itemchange", function(e) {
+          this.onItemChange = function(e) {
             var detail = e.detail;
             if (detail.removed) {
               self.items.splice(detail.index, 1);
@@ -91,7 +92,9 @@
             if (detail.added) {
               self.items.splice(detail.index, 0, detail.added);
             }
-          });
+          };
+          collection.addEventListener("itemchange", this.onItemChange);
+          this.lastCollection = this.collection;
         },
         addNewCollection: function() {
           this.collection = this.shadowRoot.querySelector(".first-run-container input").value;
@@ -103,6 +106,12 @@
           });
         },
         collectionChanged: function() {
+          // Clean up any events on the old collection if we change collections.
+          if (this.lastCollection && this.onItemChange) {
+            var lastCollection = this.collections.getCollection(this.lastCollection);
+            lastCollection.removeEventListener("itemchange", this.onItemChange);
+            this.onItemChange = null;
+          }
           this.shadowRoot.querySelector(".first-run-container input").value = this.collection;
           if (this.collection === "") {
             return;
